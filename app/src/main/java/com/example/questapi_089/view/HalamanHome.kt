@@ -1,6 +1,7 @@
 package com.example.questapi_089.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.localrestapi.R
+import com.example.questapi_089.modeldata.DataSiswa
 import com.example.questapi_089.uicontroller.route.DestinasiHome
 import com.example.questapi_089.viewmodel.HomeViewModel
 import com.example.questapi_089.viewmodel.StatusUiSiswa
@@ -120,3 +122,25 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
         }
     }
 }
+
+@Composable
+fun DaftarSiswa(
+    itemSiswa : List<DataSiswa>,
+    //edit 2.1 : tambahkab parameter onSiswaClick
+    onSiswaClick: (DataSiswa) -> Unit,
+    modifier: Modifier=Modifier
+){
+    LazyColumn(modifier = Modifier){
+        items(items = itemSiswa, key = {it.id}){
+                person ->
+            ItemSiswa(
+                siswa = person,
+                modifier = Modifier
+                    .padding(dimensionResource(id = R.dimen.padding_small))
+                    //edit 2.2 jadikan itemsiswa menjadi clickable()
+                    .clickable { onSiswaClick(person) }
+            )
+        }
+    }
+}
+
