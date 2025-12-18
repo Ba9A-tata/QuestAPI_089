@@ -1,0 +1,23 @@
+package com.example.questapi_089.viewmodel.provider
+
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.questapi_089.repositori.AplikasiDataSiswa
+import com.example.questapi_089.viewmodel.EntryViewModel
+import com.example.questapi_089.viewmodel.HomeViewModel
+
+fun CreationExtras.aplikasiDataSiswa(): AplikasiDataSiswa = (
+        this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as AplikasiDataSiswa
+        )
+object PenyediaViewModel {
+    val Factory = viewModelFactory {
+        initializer {
+            HomeViewModel(aplikasiDataSiswa().containerApp.repositoryDataSiswa)
+        }
+        initializer {
+            EntryViewModel(aplikasiDataSiswa().containerApp.repositoryDataSiswa)
+        }
+    }
+}
