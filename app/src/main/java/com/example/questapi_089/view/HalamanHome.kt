@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
@@ -18,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.localrestapi.R
 import com.example.questapi_089.uicontroller.route.DestinasiHome
 import com.example.questapi_089.viewmodel.HomeViewModel
+import com.example.questapi_089.viewmodel.StatusUiSiswa
 import com.example.questapi_089.viewmodel.provider.PenyediaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,5 +64,30 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         )
+    }
+}
+
+@Composable
+fun HomeBody(
+    statusUiSiswa: StatusUiSiswa,
+    //edit 2.3 tambahkan parameter onSiswaClick
+    onSiswaClick: (Int) -> Unit,
+    retryAction: () -> Unit,
+    modifier: Modifier = Modifier
+){
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ){
+        when(statusUiSiswa){
+            is StatusUiSiswa.Loading -> LoadingScreen()
+            //edit 2.5 : tambahkan event onSiswaClick
+            is StatusUiSiswa.Success -> DaftarSiswa(itemSiswa = statusUiSiswa.Siswa,
+                onSiswaClick = {onSiswaClick(it.id)} )
+            is StatusUiSiswa.Error -> ErrorScreen(
+                retryAction,
+                modifier = modifier.fillMaxSize()
+            )
+        }
     }
 }
