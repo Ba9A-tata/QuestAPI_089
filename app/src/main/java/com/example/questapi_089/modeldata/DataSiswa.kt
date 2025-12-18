@@ -20,5 +20,11 @@ data class DetailSiswa(
     val nama: String = "",
     val alamat: String = "",
     val telpon: String = "",
-
     )
+
+fun DetailSiswa.toDataSiswa(): DataSiswa = DataSiswa(
+    id = id,
+    nama = nama,
+    alamat = alamat,
+    telpon = telpon
+)
