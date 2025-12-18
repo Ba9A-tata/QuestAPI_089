@@ -1,8 +1,12 @@
 package com.example.questapi_089.view
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -14,7 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.localrestapi.R
 import com.example.questapi_089.uicontroller.route.DestinasiHome
@@ -88,6 +94,29 @@ fun HomeBody(
                 retryAction,
                 modifier = modifier.fillMaxSize()
             )
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen(modifier: Modifier = Modifier) {
+    Image(
+        modifier = modifier.size(200.dp),
+        painter = painterResource(R.drawable.loading_img),
+        contentDescription = stringResource(R.string.loading)
+    )
+}
+
+@Composable
+fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = stringResource(R.string.gagal), modifier = Modifier.padding(16.dp))
+        Button(onClick = retryAction) {
+            Text(stringResource(R.string.retry))
         }
     }
 }
