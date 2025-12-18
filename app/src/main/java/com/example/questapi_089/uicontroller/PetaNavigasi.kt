@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.questapi_089.uicontroller.route.DestinasiEntry
 import com.example.questapi_089.uicontroller.route.DestinasiHome
+import com.example.questapi_089.view.EntrySiswaScreen
+import com.example.questapi_089.view.HomeScreen
 
 @Composable
 fun DataSiswaApp(navController: NavHostController = rememberNavController(), modifier: Modifier){
