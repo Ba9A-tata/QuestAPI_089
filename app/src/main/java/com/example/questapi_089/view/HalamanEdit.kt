@@ -6,14 +6,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.questapi_089.uicontroller.route.DestinasiEdit
+import com.example.questapi_089.viewmodel.EditViewModel
 import com.example.questapi_089.viewmodel.provider.PenyediaViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditSiswaScreen(
     navigateBack: () -> Unit,
-    onNavigateUp: () -> Unit,
+    onNavigateUp: () -> Unit= navigateBack,
     modifier: Modifier = Modifier,
     viewModel: EditViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
@@ -22,7 +26,7 @@ fun EditSiswaScreen(
             SiswaTopAppBar(
                 title = stringResource(DestinasiEdit.titleRes),
                 canNavigateBack = true,
-                navigateUp = onNavigateUp
+                onNavigateUp = onNavigateUp
             )
         },
         modifier = modifier

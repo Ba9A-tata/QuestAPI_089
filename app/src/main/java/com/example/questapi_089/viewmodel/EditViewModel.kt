@@ -9,42 +9,53 @@ import androidx.lifecycle.viewModelScope
 import com.example.questapi_089.modeldata.DetailSiswa
 import com.example.questapi_089.modeldata.UIStateSiswa
 import com.example.questapi_089.modeldata.toDataSiswa
+import com.example.questapi_089.modeldata.toUiStateSiswa
 import com.example.questapi_089.repositori.RepositoryDataSiswa
+import com.example.questapi_089.uicontroller.route.DestinasiDetail
+import com.example.questapi_089.uicontroller.route.DestinasiEdit
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class EditViewModel(savedStateHandle: SavedStateHandle, private val repositoryDataSiswa:
-RepositoryDataSiswa
-): ViewModel() {
+class EditViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val repositoryDataSiswa: RepositoryDataSiswa
+) : ViewModel() {
+
     var uiStateSiswa by mutableStateOf(UIStateSiswa())
         private set
 
-    private val idSiswa: Int = checkNotNull(savedStateHandle[DestinasiDetail.itemIdArg])
+    private val idSiswa: Int =
+        checkNotNull(savedStateHandle[DestinasiEdit.itemIdArg])
+
     init {
         viewModelScope.launch {
-            uiStateSiswa = repositoryDataSiswa.getSatuSiswa(idSiswa)
+            uiStateSiswa = repositoryDataSiswa
+                .getSatuSiswa(idSiswa)
                 .toUiStateSiswa(true)
         }
     }
-    fun updateUiState(detailsSiswa: DetailSiswa) {
-        uiStateSiswa =
-            UIStateSiswa(detailSiswa = detailsSiswa, isEntryValid = validasiInput(detailsSiswa))
-    }
-    private fun validasiInput(uiState: DetailSiswa = uiStateSiswa.detailSiswa ): Boolean {
-        return with(uiState) {
-            nama.isNotBlank() && alamat.isNotBlank() && telpon.isNotBlank()
-        }
-    }
-    suspend fun editSatuSiswa(){
-        if (validasiInput(uiStateSiswa.detailSiswa)){
-            val call: Response<Void> = repositoryDataSiswa.editSatuSiswa(idSiswa, uiStateSiswa
-                .detailSiswa.toDataSiswa())
 
-            if (call.isSuccessful){
-                println("Update Sukses : ${call.message()}")
-            }else{
-                println("Update Error : ${call.errorBody()}")
-            }
+    fun updateUiState(detailsSiswa: DetailSiswa) {
+        uiStateSiswa = UIStateSiswa(
+            detailSiswa = detailsSiswa,
+            isEntryValid = validasiInput(detailsSiswa)
+        )
+    }
+
+    private fun validasiInput(
+        uiState: DetailSiswa = uiStateSiswa.detailSiswa
+    ): Boolean {
+        return uiState.nama.isNotBlank()
+                && uiState.alamat.isNotBlank()
+                && uiState.telpon.isNotBlank()
+    }
+
+    suspend fun editSatuSiswa() {
+        if (validasiInput()) {
+            repositoryDataSiswa.editSatuSiswa(
+                idSiswa,
+                uiStateSiswa.detailSiswa.toDataSiswa()
+            )
         }
     }
 }

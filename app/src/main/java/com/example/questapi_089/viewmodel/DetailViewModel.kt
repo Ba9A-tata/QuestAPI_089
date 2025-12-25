@@ -11,6 +11,11 @@ import com.example.questapi_089.repositori.RepositoryDataSiswa
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
+import androidx.lifecycle.viewModelScope
+import com.example.questapi_089.uicontroller.route.DestinasiDetail
+import kotlinx.coroutines.launch
+
+
 
 sealed interface StatusUIDetail {
     data class Success(val satusiswa: DataSiswa) : StatusUIDetail

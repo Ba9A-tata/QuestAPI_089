@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +36,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.localrestapi.R
 import com.example.questapi_089.modeldata.DataSiswa
+import com.example.questapi_089.uicontroller.route.DestinasiDetail
+import com.example.questapi_089.viewmodel.DetailViewModel
+import com.example.questapi_089.viewmodel.StatusUIDetail
 import com.example.questapi_089.viewmodel.provider.PenyediaViewModel
 import kotlinx.coroutines.launch
 
@@ -46,48 +50,47 @@ fun DetailSiswaScreen(
     modifier: Modifier = Modifier,
     viewModel: DetailViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
+
+    val scope = rememberCoroutineScope() // ⬅️ WAJIB
+
+    LaunchedEffect(Unit) {
+        viewModel.getSatuSiswa()
+    }
+
     Scaffold(
         topBar = {
             SiswaTopAppBar(
                 title = stringResource(DestinasiDetail.titleRes),
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                onNavigateUp = navigateBack
             )
         },
         floatingActionButton = {
             val uiState = viewModel.statusUIDetail
             FloatingActionButton(
                 onClick = {
-                    when(uiState) {
-                        is StatusUIDetail.Success ->
-                            navigateToEditItem(uiState.satusiswa.id) else -> {}
+                    if (uiState is StatusUIDetail.Success) {
+                        navigateToEditItem(uiState.satusiswa.id)
                     }
-                },
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
+                }
             ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(R.string.update),
-                )
+                Icon(Icons.Default.Edit, contentDescription = "Edit")
             }
-        }, modifier = modifier
+        }
     ) { innerPadding ->
-        val coroutineScope = rememberCoroutineScope()
         BodyDetailDataSiswa(
             statusUIDetail = viewModel.statusUIDetail,
             onDelete = {
-                coroutineScope.launch {
-                    viewModel.hapusSatuSiswa()
-                    navigateBack()
+                scope.launch {
+                    viewModel.hapusSatuSiswa() // 🔥 PANGGIL API DELETE
+                    navigateBack()             // 🔙 balik ke Home
                 }
             },
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.padding(innerPadding)
         )
     }
 }
+
 
 @Composable
 private fun BodyDetailDataSiswa(
