@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 fun DetailSiswaScreen(
     navigateToEditItem: (Int) -> Unit,
     navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
 
 ) {
 
